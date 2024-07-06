@@ -1,4 +1,13 @@
 <?php include_once('connection.php');
+ 
+    session_start();
+    @$tid = $_SESSION['admin_id'];
+    if ($tid == '') {
+    
+        echo "<script>window.location='index.php'</script>";
+        session_destroy();
+    }
+
 $fail = "";
 $success = "";
 if (isset($_POST['add'])) {
@@ -6,13 +15,21 @@ if (isset($_POST['add'])) {
     $subject = $_POST['subject'];
     $marks = $_POST['marks'];
 
-    $sql = mysqli_query($conn, "INSERT INTO `tbl_students`(`name`, `subject`, `marks`) VALUES ('$name','$subject','$marks')");
-    if ($sql) {
-        $success = "success";
-        header("location:dashboard.php?msg=success");
-    } else {
-        $fail = "Some Errror occured please try.";
-        header("location:dashboard.php?msg=error");
+    $csql = mysqli_query($conn, "SELECT * FROM `tbl_students` WHERE `name`='$name' AND `subject`='$subject' ");
+    $count = mysqli_num_rows($csql);
+
+    if($count){
+        $check = "check_failed";
+        header("location:dashboard.php?msg=check");
+    }else{
+        $sql = mysqli_query($conn, "INSERT INTO `tbl_students`(`name`, `subject`, `marks`) VALUES ('$name','$subject','$marks')");
+        if ($sql) {
+            $success = "success";
+            header("location:dashboard.php?msg=success");
+        } else {
+            $fail = "Some Errror occured please try.";
+            header("location:dashboard.php?msg=error");
+        }
     }
 }
 if (isset($_POST['edit'])) {
@@ -48,7 +65,7 @@ $ssql = mysqli_query($conn, "SELECT * FROM `tbl_students` ORDER BY id DESC");
 <html lang="en">
 
 <head>
-    <title>Bootstrap Example</title>
+    <title>Teachers</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -81,7 +98,7 @@ $ssql = mysqli_query($conn, "SELECT * FROM `tbl_students` ORDER BY id DESC");
 
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                <li><a href="logout.php"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>
         </div>
     </nav>
@@ -110,7 +127,15 @@ $ssql = mysqli_query($conn, "SELECT * FROM `tbl_students` ORDER BY id DESC");
                 <strong>Success!</strong> Student data Edited Successfull..
             </div>
         <?php
-        } ?>
+        } 
+        if (isset($_GET['msg']) &&  $_GET['msg'] == "check") {
+            ?>
+                <div class="alert alert-danger alert-dismissible">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Failed!</strong> Student data Already Exists...
+                </div>
+            <?php
+            }?>
         <table class="table table-bordered">
             <thead>
                 <tr>
