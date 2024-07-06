@@ -4,12 +4,13 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $sql = mysqli_query($conn, "SELECT * FROM `tbl_admin` WHERE `username`='$username' AND `password`='$password'");
+    $sql = mysqli_query($conn, "SELECT * FROM `tbl_teachers` WHERE `username`='$username' AND `password`='$password'");
     $rows = mysqli_num_rows($sql);
     if ($rows > 0) {
         $row = mysqli_fetch_object($sql);
+        session_start();
         $_SESSION['username'] = $row->username;
-        $_SESSION['admin_id'] = $rwo->id;
+        $_SESSION['admin_id'] = $row->id;
         header("location:dashboard.php");
     } else {
         $fail = "Incorrect Username Or Password.";
