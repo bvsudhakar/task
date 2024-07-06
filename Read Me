@@ -1,0 +1,11 @@
+1. After you finish downloading the project, unzip the project file.
+2. Open the project folder, and update the database credentials in case of server.
+3. start the Apache and MySQL in xammp server.
+4. Create a MySQL database with the name provided inside the connection file.
+5. Import the database file xammp server.
+6. Link for the project: http://localhost/projectnanme.
+
+**\*\***\***\*\***Login Details For Teacher **\*\***\*\*\***\*\***
+
+Username : teacher@gmail.com
+Password : 123456
