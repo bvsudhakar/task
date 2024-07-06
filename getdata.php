@@ -1,4 +1,12 @@
 <?php include_once('connection.php');
+session_start();
+@$tid = $_SESSION['admin_id'];
+if ($tid == '') {
+
+    echo "<script>window.location='index.php'</script>";
+    session_destroy();
+}
+
 $id = $_POST['id'];
 
 $ssql = mysqli_query($conn, "SELECT * FROM `tbl_students` WHERE `id`='$id'");
